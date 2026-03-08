@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2f8f9d">
+
 <title>Katie's Noggin</title>
 
 <link rel="manifest" href="manifest.json">
@@ -12,7 +15,7 @@
 
 body{
 font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-background:#e8f3f4;
+background-color:#e8f3f4;
 margin:0;
 padding:20px;
 color:#1f2933;
@@ -252,6 +255,7 @@ For my everything, you are all of it
 function saveEntry(){
 
 let symptoms=[]
+
 document.querySelectorAll(".symptom:checked").forEach(function(box){
 symptoms.push(box.value)
 })
@@ -270,6 +274,7 @@ notes:document.getElementById("notes").value
 }
 
 let entries=JSON.parse(localStorage.getItem("nogginData"))||[]
+
 entries.unshift(entry)
 
 localStorage.setItem("nogginData",JSON.stringify(entries))
@@ -326,6 +331,14 @@ Notes: ${entry.notes || "—"}
 
 renderEntries()
 
+</script>
+
+  <script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js');
+  });
+}
 </script>
 
 </body>
