@@ -1,10 +1,11 @@
-const CACHE_NAME = 'katies-noggin-v1';
+const CACHE_NAME = 'katies-noggin-v2';
 
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  './KC.png'
+  './KC.png',
+  './sw.js'
 ];
 
 self.addEventListener('install', event => {
