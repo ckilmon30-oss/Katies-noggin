@@ -12,7 +12,6 @@
 <link rel="icon" href="KC.png">
 
 <style>
-
 body{
 font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 background-color:#e8f3f4;
@@ -116,6 +115,25 @@ color:#6b7280;
 font-size:14px;
 }
 
+.weather-box{
+margin-top:10px;
+padding:10px;
+background:#f3f4f6;
+border:1px solid #e5e7eb;
+border-radius:10px;
+}
+
+.warning{
+margin-top:8px;
+padding:8px 10px;
+background:#fff4e5;
+border:1px solid #f6c97a;
+border-radius:8px;
+color:#8a5a00;
+font-size:14px;
+font-weight:600;
+}
+
 .log-box{
 margin-top:10px;
 padding:10px;
@@ -161,7 +179,6 @@ font-size:15px;
 color:#374151;
 font-style:italic;
 }
-
 </style>
 </head>
 
@@ -194,7 +211,7 @@ font-style:italic;
 <input type="time" id="end">
 
 <label>Severity (1-10)</label>
-<input type="number" id="severity">
+<input type="number" id="severity" min="1" max="10">
 
 <label>Main Pain Area</label>
 <select id="location">
@@ -209,7 +226,6 @@ font-style:italic;
 <label>Other Symptoms Worse Today</label>
 
 <div class="checkbox-group">
-
 <label><input type="checkbox" value="Dizziness" class="symptom"> Dizziness</label>
 <label><input type="checkbox" value="Tinnitus" class="symptom"> Ringing in ears</label>
 <label><input type="checkbox" value="Brain fog" class="symptom"> Brain fog</label>
@@ -219,7 +235,6 @@ font-style:italic;
 <label><input type="checkbox" value="TMJ pain" class="symptom"> Jaw / TMJ pain</label>
 <label><input type="checkbox" value="Skin itching" class="symptom"> Skin itching</label>
 <label><input type="checkbox" value="Light sensitivity" class="symptom"> Light sensitivity</label>
-
 </div>
 
 <label>Other Symptom</label>
@@ -232,16 +247,20 @@ font-style:italic;
 <input type="file" id="doctorImage" accept="image/*">
 <img id="doctorImagePreview" class="doctor-image-preview">
 
+<label>Weather Conditions</label>
+<div id="weatherInfo" class="weather-box small">
+Checking weather conditions...
+</div>
+
+<div id="pressureWarning"></div>
+
 <button onclick="saveEntry()">Save / Update Entry</button>
 
 <div class="history">
-
 <h2>Saved Entries</h2>
-
 <div id="entriesList" class="small">
 No entries yet.
 </div>
-
 </div>
 
 <div class="footer-note">
@@ -251,93 +270,188 @@ For my everything, you are all of it
 </div>
 
 <script>
+let weatherData = {
+pressure: null,
+temperature: null,
+pressureDrop: false
+};
 
-function saveEntry(){
+function previewDoctorImage() {
+const fileInput = document.getElementById("doctorImage");
+const preview = document.getElementById("doctorImagePreview");
+const file = fileInput.files[0];
 
-let symptoms=[]
+if (!file) {
+preview.style.display = "none";
+preview.src = "";
+return;
+}
 
+const reader = new FileReader();
+reader.onload = function(e) {
+preview.src = e.target.result;
+preview.style.display = "block";
+};
+reader.readAsDataURL(file);
+}
+
+document.getElementById("doctorImage").addEventListener("change", previewDoctorImage);
+
+function getTodayDateString() {
+const now = new Date();
+const year = now.getFullYear();
+const month = String(now.getMonth() + 1).padStart(2, "0");
+const day = String(now.getDate()).padStart(2, "0");
+return `${year}-${month}-${day}`;
+}
+
+function getNowTime() {
+const now = new Date();
+return now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
+
+function getSelectedSymptoms() {
+let symptoms = [];
 document.querySelectorAll(".symptom:checked").forEach(function(box){
-symptoms.push(box.value)
+symptoms.push(box.value);
+});
+return symptoms;
+}
+
+function getWeather() {
+if (!navigator.geolocation) {
+document.getElementById("weatherInfo").innerHTML = "Location unavailable";
+return;
+}
+
+navigator.geolocation.getCurrentPosition(function(position) {
+let lat = position.coords.latitude;
+let lon = position.coords.longitude;
+
+fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,surface_pressure&hourly=surface_pressure&timezone=auto`)
+.then(response => response.json())
+.then(data => {
+const current = data.current || {};
+weatherData.temperature = current.temperature_2m ?? null;
+weatherData.pressure = current.surface_pressure ?? null;
+
+let warningHtml = "";
+let pressureDrop = false;
+
+if (Array.isArray(data.hourly?.surface_pressure) && data.hourly.surface_pressure.length > 1) {
+const pressures = data.hourly.surface_pressure;
+const maxPressure = Math.max(...pressures);
+const minPressure = Math.min(...pressures);
+const diff = maxPressure - minPressure;
+
+if (diff >= 6) {
+pressureDrop = true;
+warningHtml = `<div class="warning">Pressure swing detected today (${diff.toFixed(1)} hPa). This can be a migraine trigger.</div>`;
+}
+}
+
+weatherData.pressureDrop = pressureDrop;
+
+document.getElementById("weatherInfo").innerHTML =
+`Pressure: ${weatherData.pressure ?? "—"} hPa<br>Temperature: ${weatherData.temperature ?? "—"}°`;
+
+document.getElementById("pressureWarning").innerHTML = warningHtml;
 })
-
-let entry={
-date:document.getElementById("date").value,
-type:document.getElementById("type").value,
-wake:document.getElementById("wake").value,
-start:document.getElementById("start").value,
-end:document.getElementById("end").value,
-severity:document.getElementById("severity").value,
-location:document.getElementById("location").value,
-symptoms:symptoms,
-other:document.getElementById("otherSymptom").value,
-notes:document.getElementById("notes").value
+.catch(() => {
+document.getElementById("weatherInfo").innerHTML = "Weather data unavailable";
+document.getElementById("pressureWarning").innerHTML = "";
+});
+}, function() {
+document.getElementById("weatherInfo").innerHTML = "Location permission denied";
+document.getElementById("pressureWarning").innerHTML = "";
+});
 }
 
-let entries=JSON.parse(localStorage.getItem("nogginData"))||[]
+function saveEntry() {
+let symptoms = getSelectedSymptoms();
 
-entries.unshift(entry)
+let entry = {
+date: document.getElementById("date").value,
+type: document.getElementById("type").value,
+wake: document.getElementById("wake").value,
+start: document.getElementById("start").value,
+end: document.getElementById("end").value,
+severity: document.getElementById("severity").value,
+location: document.getElementById("location").value,
+symptoms: symptoms,
+other: document.getElementById("otherSymptom").value,
+notes: document.getElementById("notes").value,
+pressure: weatherData.pressure,
+temperature: weatherData.temperature,
+pressureDrop: weatherData.pressureDrop,
+savedAt: getNowTime()
+};
 
-localStorage.setItem("nogginData",JSON.stringify(entries))
-
-alert("Entry Saved")
-
-renderEntries()
-
+const preview = document.getElementById("doctorImagePreview");
+if (preview.src && preview.style.display !== "none") {
+entry.doctorImage = preview.src;
 }
 
-function renderEntries(){
+let entries = JSON.parse(localStorage.getItem("nogginData")) || [];
+entries.unshift(entry);
+localStorage.setItem("nogginData", JSON.stringify(entries));
 
-let entries=JSON.parse(localStorage.getItem("nogginData"))||[]
-
-let list=document.getElementById("entriesList")
-
-if(entries.length===0){
-list.innerHTML="No entries yet."
-return
+alert("Entry Saved");
+renderEntries();
 }
 
-list.innerHTML=entries.map(function(entry){
+function renderEntries() {
+let entries = JSON.parse(localStorage.getItem("nogginData")) || [];
+let list = document.getElementById("entriesList");
 
+if (entries.length === 0) {
+list.innerHTML = "No entries yet.";
+return;
+}
+
+list.innerHTML = entries.map(function(entry) {
 return `
 <div class="entry">
-
 <strong>${entry.date} — ${entry.type}</strong><br>
 
 <span class="small">
-
+Saved: ${entry.savedAt || "—"}<br>
 Start: ${entry.start || "—"}<br>
 End: ${entry.end || "—"}<br>
 Severity: ${entry.severity || "—"}<br>
 Location: ${entry.location || "—"}<br>
-
+Wake up with it: ${entry.wake || "—"}<br>
+Pressure: ${entry.pressure ?? "—"} hPa<br>
+Temperature: ${entry.temperature ?? "—"}°<br>
 </span>
 
+${entry.pressureDrop ? `<div class="warning">Pressure swing noted this day.</div>` : ""}
+
 <div>
-
-${(entry.symptoms||[]).map(symptom=>`<span class="pill">${symptom}</span>`).join("")}
-
+${(entry.symptoms || []).map(symptom => `<span class="pill">${symptom}</span>`).join("")}
+${entry.other ? `<span class="pill">${entry.other}</span>` : ""}
 </div>
 
 <div class="small" style="margin-top:6px">
 Notes: ${entry.notes || "—"}
 </div>
 
+${entry.doctorImage ? `<img src="${entry.doctorImage}" class="doctor-image-preview" style="display:block;">` : ""}
 </div>
-`
-
-}).join("")
-
+`;
+}).join("");
 }
 
-renderEntries()
-
+document.getElementById("date").value = getTodayDateString();
+getWeather();
+renderEntries();
 </script>
 
-  <script>
+<script>
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./sw.js');
-  });
+window.addEventListener('load', function() {
+navigator.serviceWorker.register('./sw.js');
+});
 }
 </script>
 
