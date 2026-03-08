@@ -1,464 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Katie's Noggin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katie's Noggin</title>
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="KC.png">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="KC.png">
 
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f2f2f7;
-      margin: 0;
-      padding: 20px;
-      color: #111;
-    }
+<style>
 
-    .container {
-      max-width: 560px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+body{
+font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+background:#e8f3f4;
+margin:0;
+padding:20px;
+color:#1f2933;
+}
 
-    h1, h2 {
-      text-align: center;
-      margin-top: 0;
-    }
+.container{
+max-width:560px;
+margin:auto;
+background:#ffffff;
+padding:20px;
+border-radius:16px;
+box-shadow:0 6px 14px rgba(0,0,0,0.08);
+}
 
-    label {
-      display: block;
-      margin-top: 12px;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
+h1,h2{
+text-align:center;
+color:#1f2933;
+}
 
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 6px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      font-size: 16px;
-    }
+label{
+display:block;
+margin-top:12px;
+margin-bottom:6px;
+font-weight:600;
+color:#374151;
+}
 
-    textarea {
-      min-height: 80px;
-      resize: vertical;
-    }
+input,textarea,select{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #d1d5db;
+box-sizing:border-box;
+font-size:16px;
+background:#f9fafb;
+color:#111827;
+}
 
-    button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 14px;
-      border: none;
-      border-radius: 10px;
-      background: #007aff;
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-    }
+textarea{
+min-height:80px;
+resize:vertical;
+}
 
-    button:hover {
-      background: #0062cc;
-    }
+button{
+width:100%;
+padding:15px;
+margin-top:14px;
+border:none;
+border-radius:10px;
+background:#2f8f9d;
+color:white;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+}
 
-    .secondary-btn {
-      background: #6b7280;
-    }
+button:hover{
+background:#267681;
+}
 
-    .secondary-btn:hover {
-      background: #4b5563;
-    }
+.secondary-btn{
+background:#6b7280;
+}
 
-    .checkbox-group {
-      background: #f8f8fa;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 10px;
-    }
+.secondary-btn:hover{
+background:#4b5563;
+}
 
-    .checkbox-group label {
-      font-weight: normal;
-      margin: 6px 0;
-      display: block;
-    }
+.checkbox-group{
+background:#f3f4f6;
+border:1px solid #e5e7eb;
+border-radius:10px;
+padding:12px;
+}
 
-    .history {
-      margin-top: 25px;
-      padding-top: 20px;
-      border-top: 1px solid #ddd;
-    }
+.checkbox-group label{
+font-weight:normal;
+display:block;
+margin:6px 0;
+}
 
-    .entry {
-      background: #f9f9fb;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 12px;
-      margin-top: 12px;
-    }
+.history{
+margin-top:25px;
+padding-top:20px;
+border-top:1px solid #e5e7eb;
+}
 
-    .small {
-      color: #666;
-      font-size: 14px;
-    }
+.entry{
+background:#f9fafb;
+border:1px solid #e5e7eb;
+border-radius:10px;
+padding:12px;
+margin-top:12px;
+}
 
-    .log-box {
-      margin-top: 10px;
-      padding: 10px;
-      background: #fff;
-      border: 1px solid #e2e2e8;
-      border-radius: 8px;
-    }
+.small{
+color:#6b7280;
+font-size:14px;
+}
 
-    .log-item {
-      padding: 6px 0;
-      border-bottom: 1px solid #eee;
-      font-size: 14px;
-    }
+.log-box{
+margin-top:10px;
+padding:10px;
+background:#ffffff;
+border:1px solid #e5e7eb;
+border-radius:8px;
+}
 
-    .log-item:last-child {
-      border-bottom: none;
-    }
+.log-item{
+padding:6px 0;
+border-bottom:1px solid #eeeeee;
+font-size:14px;
+}
 
-    .pill {
-      display: inline-block;
-      background: #eef4ff;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 12px;
-      margin: 4px 6px 0 0;
-    }
+.log-item:last-child{
+border-bottom:none;
+}
 
-    .doctor-image-preview {
-      margin-top: 10px;
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      display: none;
-    }
+.pill{
+display:inline-block;
+background:#dff1f3;
+border-radius:999px;
+padding:4px 10px;
+font-size:12px;
+margin:4px 6px 0 0;
+color:#1f2933;
+}
 
-    .footer-note {
-      margin-top: 28px;
-      padding-top: 16px;
-      border-top: 1px solid #eee;
-      text-align: center;
-      font-size: 15px;
-      color: #555;
-      font-style: italic;
-    }
-  </style>
+.doctor-image-preview{
+margin-top:10px;
+width:100%;
+border-radius:10px;
+border:1px solid #d1d5db;
+display:none;
+}
+
+.footer-note{
+margin-top:30px;
+padding-top:16px;
+border-top:1px solid #e5e7eb;
+text-align:center;
+font-size:15px;
+color:#374151;
+font-style:italic;
+}
+
+</style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>Katie's Noggin</h1>
+<div class="container">
 
-    <label for="date">Date</label>
-    <input type="date" id="date" onchange="loadEntryForDate()">
+<h1>Katie's Noggin</h1>
 
-    <label for="type">Headache Type</label>
-    <select id="type">
-      <option value="Migraine">Migraine</option>
-      <option value="Headache">Headache</option>
-      <option value="Unsure">Unsure</option>
-    </select>
+<label>Date</label>
+<input type="date" id="date">
 
-    <label for="wake">Did you wake up with it?</label>
-    <select id="wake">
-      <option value="No">No</option>
-      <option value="Yes">Yes</option>
-    </select>
+<label>Headache Type</label>
+<select id="type">
+<option value="Migraine">Migraine</option>
+<option value="Headache">Headache</option>
+<option value="Unsure">Unsure</option>
+</select>
 
-    <label for="start">Start Time</label>
-    <input type="time" id="start">
+<label>Did you wake up with it?</label>
+<select id="wake">
+<option>No</option>
+<option>Yes</option>
+</select>
 
-    <label for="end">End Time</label>
-    <input type="time" id="end">
+<label>Start Time</label>
+<input type="time" id="start">
 
-    <label for="severity">Severity (1–10)</label>
-    <input type="number" id="severity" min="1" max="10">
+<label>End Time</label>
+<input type="time" id="end">
 
-    <label for="location">Main Pain Area</label>
-    <select id="location">
-      <option value="Temples">Temples</option>
-      <option value="Behind eyes">Behind eyes</option>
-      <option value="Base of skull">Base of skull</option>
-      <option value="Jaw / TMJ">Jaw / TMJ</option>
-      <option value="Forehead">Forehead</option>
-      <option value="One side">One side</option>
-      <option value="Other">Other</option>
-    </select>
+<label>Severity (1-10)</label>
+<input type="number" id="severity">
 
-    <label>Other Symptoms Worse Today</label>
-    <div class="checkbox-group">
-      <label><input type="checkbox" value="Dizziness" class="symptom"> Dizziness</label>
-      <label><input type="checkbox" value="Ringing in ears" class="symptom"> Ringing in ears</label>
-      <label><input type="checkbox" value="Brain fog" class="symptom"> Brain fog</label>
-      <label><input type="checkbox" value="Fatigue" class="symptom"> Fatigue</label>
-      <label><input type="checkbox" value="Nausea" class="symptom"> Nausea</label>
-      <label><input type="checkbox" value="Neck pain" class="symptom"> Neck pain</label>
-      <label><input type="checkbox" value="Jaw / TMJ pain" class="symptom"> Jaw / TMJ pain</label>
-      <label><input type="checkbox" value="Skin itching / sensitivity" class="symptom"> Skin itching / sensitivity</label>
-      <label><input type="checkbox" value="Light sensitivity" class="symptom"> Light sensitivity</label>
-      <label><input type="checkbox" value="Sound sensitivity" class="symptom"> Sound sensitivity</label>
-    </div>
+<label>Main Pain Area</label>
+<select id="location">
+<option>Temples</option>
+<option>Behind eyes</option>
+<option>Base of skull</option>
+<option>Jaw / TMJ</option>
+<option>Forehead</option>
+<option>One side</option>
+</select>
 
-    <label for="otherSymptom">Other Symptom</label>
-    <input type="text" id="otherSymptom" placeholder="Anything else worse than usual">
+<label>Other Symptoms Worse Today</label>
 
-    <label for="notes">Notes</label>
-    <textarea id="notes" placeholder="Anything important about today"></textarea>
+<div class="checkbox-group">
 
-    <label for="doctorImage">Doctor Summary Photo</label>
-    <input type="file" id="doctorImage" accept="image/*" onchange="previewDoctorImage(event)">
-    <img id="doctorImagePreview" class="doctor-image-preview" alt="Doctor summary preview">
+<label><input type="checkbox" value="Dizziness" class="symptom"> Dizziness</label>
+<label><input type="checkbox" value="Tinnitus" class="symptom"> Ringing in ears</label>
+<label><input type="checkbox" value="Brain fog" class="symptom"> Brain fog</label>
+<label><input type="checkbox" value="Fatigue" class="symptom"> Fatigue</label>
+<label><input type="checkbox" value="Nausea" class="symptom"> Nausea</label>
+<label><input type="checkbox" value="Neck pain" class="symptom"> Neck pain</label>
+<label><input type="checkbox" value="TMJ pain" class="symptom"> Jaw / TMJ pain</label>
+<label><input type="checkbox" value="Skin itching" class="symptom"> Skin itching</label>
+<label><input type="checkbox" value="Light sensitivity" class="symptom"> Light sensitivity</label>
 
-    <button onclick="saveEntry()">Save / Update Entry</button>
-    <button class="secondary-btn" onclick="clearTodayForm()">Clear Form</button>
+</div>
 
-    <div class="history">
-      <h2>Saved Entries</h2>
-      <div id="entriesList" class="small">No entries yet.</div>
-    </div>
+<label>Other Symptom</label>
+<input type="text" id="otherSymptom">
 
-    <div class="footer-note">
-      For my everything, you are all of it
-    </div>
-  </div>
+<label>Notes</label>
+<textarea id="notes"></textarea>
 
-  <script>
-    function getNowTime() {
-      const now = new Date();
-      return now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    }
+<label>Doctor Summary Photo</label>
+<input type="file" id="doctorImage" accept="image/*">
+<img id="doctorImagePreview" class="doctor-image-preview">
 
-    function getTodayDateString() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
+<button onclick="saveEntry()">Save / Update Entry</button>
 
-    function getSelectedSymptoms() {
-      let selectedSymptoms = [];
-      document.querySelectorAll('.symptom:checked').forEach(function(box) {
-        selectedSymptoms.push(box.value);
-      });
-      return selectedSymptoms;
-    }
+<div class="history">
 
-    function setSelectedSymptoms(symptoms) {
-      document.querySelectorAll('.symptom').forEach(function(box) {
-        box.checked = symptoms.includes(box.value);
-      });
-    }
+<h2>Saved Entries</h2>
 
-    function previewDoctorImage(event) {
-      const file = event.target.files[0];
-      const preview = document.getElementById("doctorImagePreview");
+<div id="entriesList" class="small">
+No entries yet.
+</div>
 
-      if (!file) {
-        preview.style.display = "none";
-        preview.src = "";
-        return;
-      }
+</div>
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        preview.src = e.target.result;
-        preview.style.display = "block";
-      };
-      reader.readAsDataURL(file);
-    }
+<div class="footer-note">
+For my everything, you are all of it
+</div>
 
-    function saveEntry() {
-      const date = document.getElementById("date").value;
-      if (!date) {
-        alert("Please enter a date.");
-        return;
-      }
+</div>
 
-      const type = document.getElementById("type").value;
-      const wake = document.getElementById("wake").value;
-      const start = document.getElementById("start").value;
-      const end = document.getElementById("end").value;
-      const severity = document.getElementById("severity").value;
-      const location = document.getElementById("location").value;
-      const symptoms = getSelectedSymptoms();
-      const other = document.getElementById("otherSymptom").value;
-      const notes = document.getElementById("notes").value;
-      const doctorImageData = document.getElementById("doctorImagePreview").src || "";
+<script>
 
-      let entries = JSON.parse(localStorage.getItem("nogginData")) || [];
-      let existingIndex = entries.findIndex(entry => entry.date === date);
+function saveEntry(){
 
-      const updateText = `${getNowTime()} — ${type}, severity ${severity || "—"}, symptoms: ${symptoms.length ? symptoms.join(", ") : "none"}, notes: ${notes || "none"}`;
+let symptoms=[]
+document.querySelectorAll(".symptom:checked").forEach(function(box){
+symptoms.push(box.value)
+})
 
-      if (existingIndex !== -1) {
-        entries[existingIndex].type = type;
-        entries[existingIndex].wake = wake;
-        entries[existingIndex].start = start;
-        entries[existingIndex].end = end;
-        entries[existingIndex].severity = severity;
-        entries[existingIndex].location = location;
-        entries[existingIndex].symptoms = symptoms;
-        entries[existingIndex].other = other;
-        entries[existingIndex].notes = notes;
+let entry={
+date:document.getElementById("date").value,
+type:document.getElementById("type").value,
+wake:document.getElementById("wake").value,
+start:document.getElementById("start").value,
+end:document.getElementById("end").value,
+severity:document.getElementById("severity").value,
+location:document.getElementById("location").value,
+symptoms:symptoms,
+other:document.getElementById("otherSymptom").value,
+notes:document.getElementById("notes").value
+}
 
-        if (doctorImageData && doctorImageData.startsWith("data:image")) {
-          entries[existingIndex].doctorImage = doctorImageData;
-        }
+let entries=JSON.parse(localStorage.getItem("nogginData"))||[]
+entries.unshift(entry)
 
-        entries[existingIndex].updates = entries[existingIndex].updates || [];
-        entries[existingIndex].updates.unshift(updateText);
-      } else {
-        entries.unshift({
-          date,
-          type,
-          wake,
-          start,
-          end,
-          severity,
-          location,
-          symptoms,
-          other,
-          notes,
-          doctorImage: doctorImageData,
-          updates: [updateText]
-        });
-      }
+localStorage.setItem("nogginData",JSON.stringify(entries))
 
-      localStorage.setItem("nogginData", JSON.stringify(entries));
-      alert("Entry Saved");
-      renderEntries();
-    }
+alert("Entry Saved")
 
-    function loadEntryForDate() {
-      const date = document.getElementById("date").value;
-      let entries = JSON.parse(localStorage.getItem("nogginData")) || [];
-      let entry = entries.find(entry => entry.date === date);
-      const preview = document.getElementById("doctorImagePreview");
-      const fileInput = document.getElementById("doctorImage");
+renderEntries()
 
-      if (!entry) {
-        clearForm(false);
-        document.getElementById("date").value = date;
-        preview.style.display = "none";
-        preview.src = "";
-        fileInput.value = "";
-        return;
-      }
+}
 
-      document.getElementById("type").value = entry.type || "Migraine";
-      document.getElementById("wake").value = entry.wake || "No";
-      document.getElementById("start").value = entry.start || "";
-      document.getElementById("end").value = entry.end || "";
-      document.getElementById("severity").value = entry.severity || "";
-      document.getElementById("location").value = entry.location || "Temples";
-      document.getElementById("otherSymptom").value = entry.other || "";
-      document.getElementById("notes").value = entry.notes || "";
-      setSelectedSymptoms(entry.symptoms || []);
+function renderEntries(){
 
-      if (entry.doctorImage) {
-        preview.src = entry.doctorImage;
-        preview.style.display = "block";
-      } else {
-        preview.src = "";
-        preview.style.display = "none";
-      }
+let entries=JSON.parse(localStorage.getItem("nogginData"))||[]
 
-      fileInput.value = "";
-    }
+let list=document.getElementById("entriesList")
 
-    function clearForm(resetDate = true) {
-      if (resetDate) {
-        document.getElementById("date").value = "";
-      }
-      document.getElementById("type").value = "Migraine";
-      document.getElementById("wake").value = "No";
-      document.getElementById("start").value = "";
-      document.getElementById("end").value = "";
-      document.getElementById("severity").value = "";
-      document.getElementById("location").value = "Temples";
-      document.getElementById("otherSymptom").value = "";
-      document.getElementById("notes").value = "";
-      document.getElementById("doctorImage").value = "";
+if(entries.length===0){
+list.innerHTML="No entries yet."
+return
+}
 
-      const preview = document.getElementById("doctorImagePreview");
-      preview.src = "";
-      preview.style.display = "none";
+list.innerHTML=entries.map(function(entry){
 
-      document.querySelectorAll('.symptom').forEach(function(box) {
-        box.checked = false;
-      });
-    }
+return `
+<div class="entry">
 
-    function clearTodayForm() {
-      const currentDate = document.getElementById("date").value;
-      clearForm(false);
-      document.getElementById("date").value = currentDate;
-    }
+<strong>${entry.date} — ${entry.type}</strong><br>
 
-    function renderEntries() {
-      let entries = JSON.parse(localStorage.getItem("nogginData")) || [];
-      let entriesList = document.getElementById("entriesList");
+<span class="small">
 
-      if (entries.length === 0) {
-        entriesList.innerHTML = "No entries yet.";
-        return;
-      }
+Start: ${entry.start || "—"}<br>
+End: ${entry.end || "—"}<br>
+Severity: ${entry.severity || "—"}<br>
+Location: ${entry.location || "—"}<br>
 
-      entriesList.innerHTML = entries.map(function(entry) {
-        return `
-          <div class="entry">
-            <strong>${entry.date || "No date"} — ${entry.type || "No type"}</strong><br>
-            <span class="small">
-              Woke up with it: ${entry.wake || "No"}<br>
-              Start: ${entry.start || "—"}<br>
-              End: ${entry.end || "—"}<br>
-              Severity: ${entry.severity || "—"}<br>
-              Pain area: ${entry.location || "—"}<br>
-            </span>
+</span>
 
-            <div style="margin-top:6px;">
-              ${(entry.symptoms || []).map(symptom => `<span class="pill">${symptom}</span>`).join("")}
-              ${entry.other ? `<span class="pill">${entry.other}</span>` : ""}
-            </div>
+<div>
 
-            <div class="small" style="margin-top:8px;">
-              Notes: ${entry.notes || "—"}
-            </div>
+${(entry.symptoms||[]).map(symptom=>`<span class="pill">${symptom}</span>`).join("")}
 
-            ${entry.doctorImage ? `
-              <div style="margin-top:10px;">
-                <strong class="small">Doctor Summary Photo</strong><br>
-                <img src="${entry.doctorImage}" style="margin-top:6px; width:100%; border-radius:10px; border:1px solid #ddd;">
-              </div>
-            ` : ""}
+</div>
 
-            <div class="log-box">
-              <strong>Update Log</strong>
-              ${(entry.updates || []).map(update => `<div class="log-item">${update}</div>`).join("")}
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
+<div class="small" style="margin-top:6px">
+Notes: ${entry.notes || "—"}
+</div>
 
-    document.getElementById("date").value = getTodayDateString();
-    loadEntryForDate();
-    renderEntries();
-  </script>
+</div>
+`
+
+}).join("")
+
+}
+
+renderEntries()
+
+</script>
 
 </body>
 </html>
