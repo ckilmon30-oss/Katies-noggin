@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katie's Noggin</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="KC.png">
+
+<style>
+body{
+font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+background:#f2f2f7;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+h1{
+text-align:center;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#007aff;
+color:white;
+font-size:16px;
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Katie's Noggin</h1>
+
+<label>Date</label>
+<input type="date" id="date">
+
+<label>Did you wake up with the headache?</label>
+<input type="text" id="wake">
+
+<label>Start Time</label>
+<input type="time" id="start">
+
+<label>End Time</label>
+<input type="time" id="end">
+
+<label>Severity (1-10)</label>
+<input type="number" id="severity">
+
+<label>Notes</label>
+<textarea id="notes"></textarea>
+
+<button onclick="saveEntry()">Save Entry</button>
+
+</div>
+
+<script>
+
+function saveEntry(){
+
+let entry={
+date:document.getElementById("date").value,
+wake:document.getElementById("wake").value,
+start:document.getElementById("start").value,
+end:document.getElementById("end").value,
+severity:document.getElementById("severity").value,
+notes:document.getElementById("notes").value
+}
+
+let entries=JSON.parse(localStorage.getItem("nogginData"))||[]
+entries.push(entry)
+
+localStorage.setItem("nogginData",JSON.stringify(entries))
+
+alert("Entry Saved")
+
+}
+
+</script>
+
+</body>
+</html>
