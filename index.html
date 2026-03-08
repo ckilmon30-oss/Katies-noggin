@@ -1,108 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Katie's Noggin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katie's Noggin</title>
 
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="KC.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="KC.png">
 
-<style>
-body{
-font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-background:#f2f2f7;
-margin:0;
-padding:20px;
-}
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f2f2f7;
+      margin: 0;
+      padding: 20px;
+    }
 
-.container{
-max-width:500px;
-margin:auto;
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
+    .container {
+      max-width: 520px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
 
-h1{
-text-align:center;
-}
+    h1 {
+      text-align: center;
+      margin-top: 0;
+    }
 
-button{
-width:100%;
-padding:15px;
-margin-top:10px;
-border:none;
-border-radius:10px;
-background:#007aff;
-color:white;
-font-size:16px;
-}
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
 
-input,textarea{
-width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:10px;
-border-radius:8px;
-border:1px solid #ccc;
-}
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
 
-</style>
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #007aff;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0062cc;
+    }
+
+    .checkbox-group {
+      background: #f8f8fa;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-group label {
+      font-weight: normal;
+      margin: 6px 0;
+      display: block;
+    }
+
+    .history {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .entry {
+      background: #f9f9fb;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .entry strong {
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .small {
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+  <div class="container">
+    <h1>Katie's Noggin</h1>
 
-<h1>Katie's Noggin</h1>
+    <label for="date">Date</label>
+    <input type="date" id="date">
 
-<label>Date</label>
-<input type="date" id="date">
+    <label for="type">Headache Type</label>
+    <select id="type">
+      <option value="Migraine">Migraine</option>
+      <option value="Headache">Headache</option>
+      <option value="Unsure">Unsure</option>
+    </select>
 
-<label>Did you wake up with the headache?</label>
-<input type="text" id="wake">
+    <label for="wake">Did you wake up with it?</label>
+    <select id="wake">
+      <option value="No">No</option>
+      <option value="Yes">Yes</option>
+    </select>
 
-<label>Start Time</label>
-<input type="time" id="start">
+    <label for="start">Start Time</label>
+    <input type="time" id="start">
 
-<label>End Time</label>
-<input type="time" id="end">
+    <label for="end">End Time</label>
+    <input type="time" id="end">
 
-<label>Severity (1-10)</label>
-<input type="number" id="severity">
+    <label for="severity">Severity (1–10)</label>
+    <input type="number" id="severity" min="1" max="10">
 
-<label>Notes</label>
-<textarea id="notes"></textarea>
+    <label for="location">Main Pain Area</label>
+    <select id="location">
+      <option value="Temples">Temples</option>
+      <option value="Behind eyes">Behind eyes</option>
+      <option value="Base of skull">Base of skull</option>
+      <option value="Jaw / TMJ">Jaw / TMJ</option>
+      <option value="Forehead">Forehead</option>
+      <option value="One side">One side</option>
+      <option value="Other">Other</option>
+    </select>
 
-<button onclick="saveEntry()">Save Entry</button>
+    <label>Other Symptoms Worse Today</label>
+    <div class="checkbox-group">
+      <label><input type="checkbox" value="Dizziness" class="symptom"> Dizziness</label>
+      <label><input type="checkbox" value="Ringing in ears" class="symptom"> Ringing in ears</label>
+      <label><input type="checkbox" value="Brain fog" class="symptom"> Brain fog</label>
+      <label><input type="checkbox" value="Fatigue" class="symptom"> Fatigue</label>
+      <label><input type="checkbox" value="Nausea" class="symptom"> Nausea</label>
+      <label><input type="checkbox" value="Neck pain" class="symptom"> Neck pain</label>
+      <label><input type="checkbox" value="Jaw / TMJ pain" class="symptom"> Jaw / TMJ pain</label>
+      <label><input type="checkbox" value="Skin itching / sensitivity" class="symptom"> Skin itching / sensitivity</label>
+      <label><input type="checkbox" value="Light sensitivity" class="symptom"> Light sensitivity</label>
+      <label><input type="checkbox" value="Sound sensitivity" class="symptom"> Sound sensitivity</label>
+    </div>
 
-</div>
+    <label for="otherSymptom">Other Symptom</label>
+    <input type="text" id="otherSymptom" placeholder="Anything else worse than usual">
 
-<script>
+    <label for="notes">Notes</label>
+    <textarea id="notes" placeholder="Anything important about today"></textarea>
 
-function saveEntry(){
+    <button onclick="saveEntry()">Save Entry</button>
 
-let entry={
-date:document.getElementById("date").value,
-wake:document.getElementById("wake").value,
-start:document.getElementById("start").value,
-end:document.getElementById("end").value,
-severity:document.getElementById("severity").value,
-notes:document.getElementById("notes").value
-}
+    <div class="history">
+      <h2>Saved Entries</h2>
+      <div id="entriesList" class="small">No entries yet.</div>
+    </div>
+  </div>
 
-let entries=JSON.parse(localStorage.getItem("nogginData"))||[]
-entries.push(entry)
+  <script>
+    function saveEntry() {
+      let selectedSymptoms = [];
+      document.querySelectorAll('.symptom:checked').forEach(function(box) {
+        selectedSymptoms.push(box.value);
+      });
 
-localStorage.setItem("nogginData",JSON.stringify(entries))
+      let entry = {
+        date: document.getElementById("date").value,
+        type: document.getElementById("type").value,
+        wake: document.getElementById("wake").value,
+        start: document.getElementById("start").value,
+        end: document.getElementById("end").value,
+        severity: document.getElementById("severity").value,
+        location: document.getElementById("location").value,
+        symptoms: selectedSymptoms,
+        other: document.getElementById("otherSymptom").value,
+        notes: document.getElementById("notes").value
+      };
 
-alert("Entry Saved")
+      let entries = JSON.parse(localStorage.getItem("nogginData")) || [];
+      entries.unshift(entry);
+      localStorage.setItem("nogginData", JSON.stringify(entries));
 
-}
+      alert("Entry Saved");
 
-</script>
+      clearForm();
+      renderEntries();
+    }
+
+    function clearForm() {
+      document.getElementById("date").value = "";
+      document.getElementById("type").value = "Migraine";
+      document.getElementById("wake").value = "No";
+      document.getElementById("start").value = "";
+      document.getElementById("end").value = "";
+      document.getElementById("severity").value = "";
+      document.getElementById("location").value = "Temples";
+      document.getElementById("otherSymptom").value = "";
+      document.getElementById("notes").value = "";
+
+      document.querySelectorAll('.symptom').forEach(function(box) {
+        box.checked = false;
+      });
+    }
+
+    function renderEntries() {
+      let entries = JSON.parse(localStorage.getItem("nogginData")) || [];
+      let entriesList = document.getElementById("entriesList");
+
+      if (entries.length === 0) {
+        entriesList.innerHTML = "No entries yet.";
+        return;
+      }
+
+      entriesList.innerHTML = entries.map(function(entry, index) {
+        return `
+          <div class="entry">
+            <strong>${entry.date || "No date"} — ${entry.type || "No type"}</strong><br>
+            <span class="small">
+              Woke up with it: ${entry.wake || "No"}<br>
+              Start: ${entry.start || "—"}<br>
+              End: ${entry.end || "—"}<br>
+              Severity: ${entry.severity || "—"}<br>
+              Pain area: ${entry.location || "—"}<br>
+              Worse symptoms: ${entry.symptoms.length ? entry.symptoms.join(", ") : "None selected"}<br>
+              Other symptom: ${entry.other || "—"}<br>
+              Notes: ${entry.notes || "—"}
+            </span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    renderEntries();
+  </script>
 
 </body>
 </html>
